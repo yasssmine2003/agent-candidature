@@ -66,6 +66,32 @@ def comparer_competences(competences_cv, competences_offre):
     return {"presentes": presentes, "manquantes": manquantes}
 
 
+def comparer_avec_sources(declarees, demontrees, requises):
+    """Comme comparer_competences, mais en tenant compte des compétences démontrées
+    dans les expériences, et en indiquant d'où vient chaque compétence trouvée.
+
+    Une compétence déclarée ET démontrée est marquée "déclarée et démontrée" : c'est la plus solide.
+    """
+    declarees_norm = {normaliser(c) for c in declarees}
+    demontrees_norm = {normaliser(c) for c in demontrees}
+
+    resultat = comparer_competences(list(declarees) + list(demontrees), requises)
+
+    presentes = []
+    for c in resultat["presentes"]:
+        dans_declarees = normaliser(c) in declarees_norm
+        dans_demontrees = normaliser(c) in demontrees_norm
+        if dans_declarees and dans_demontrees:
+            source = "déclarée et démontrée"
+        elif dans_declarees:
+            source = "déclarée"
+        else:
+            source = "démontrée dans une expérience"
+        presentes.append({"competence": c, "source": source})
+
+    return {"presentes": presentes, "manquantes": resultat["manquantes"]}
+
+
 def experience_totale_mois(experiences):
     """Somme des durées de toutes les expériences, en mois.
 
@@ -84,26 +110,96 @@ def verifier_experience(total_mois, minimum_mois):
 
 
 # ============================================================
-# 2. Registre : nom de l'outil -> fonction Python
+# 2. Outils liés à UNE candidature (l'état de l'agent)
 # ============================================================
 
-OUTILS = {
-    "calculer_duree_mois": calculer_duree_mois,
-}
+def creer_outils(cv, offre):
+    """Crée le registre d'outils pour une candidature donnée.
+
+    Les fonctions définies ici « se souviennent » de `cv` et `offre` (c'est une closure) :
+    le LLM peut les appeler sans arguments, il n'a jamais à recopier le CV.
+    """
+
+    def analyser_competences():
+        demontrees = [c for e in cv.experiences for c in e.competences_demontrees]
+        return comparer_avec_sources(cv.competences, demontrees, offre.competences_requises)
+
+    def analyser_experience():
+        total = experience_totale_mois(cv.experiences)
+        resultat = verifier_experience(total, offre.experience_min_mois)
+        resultat["total_mois"] = total
+        resultat["minimum_mois"] = offre.experience_min_mois
+        return resultat
+
+    def lister_experiences():
+        return [
+            {
+                "poste": e.poste,
+                "entreprise": e.entreprise,
+                "date_debut": e.date_debut,
+                "date_fin": e.date_fin or "en cours",
+                "duree_mois": calculer_duree_mois(e.date_debut, e.date_fin),
+                "competences_demontrees": e.competences_demontrees,
+            }
+            for e in cv.experiences
+        ]
+
+    return {
+        "analyser_competences": analyser_competences,
+        "analyser_experience": analyser_experience,
+        "lister_experiences": lister_experiences,
+        "calculer_duree_mois": calculer_duree_mois,
+    }
 
 
 # ============================================================
 # 3. Description des outils pour le LLM
 # ============================================================
 
+SANS_ARGUMENTS = {"type": "object", "properties": {}}
+
 TOOLS = [
+    {
+        "type": "function",
+        "function": {
+            "name": "analyser_competences",
+            "description": (
+                "Compare les compétences du CV (déclarées dans la section compétences et "
+                "démontrées dans les expériences) à celles demandées par l'offre. "
+                "Renvoie les compétences présentes avec leur source, et les compétences manquantes."
+            ),
+            "parameters": SANS_ARGUMENTS,
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "analyser_experience",
+            "description": (
+                "Calcule l'expérience totale de la candidate en mois et indique "
+                "si elle atteint le minimum demandé par l'offre."
+            ),
+            "parameters": SANS_ARGUMENTS,
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "lister_experiences",
+            "description": (
+                "Liste les expériences du CV avec le poste, l'entreprise, les dates et la durée en mois. "
+                "Utile pour les questions sur une expérience précise."
+            ),
+            "parameters": SANS_ARGUMENTS,
+        },
+    },
     {
         "type": "function",
         "function": {
             "name": "calculer_duree_mois",
             "description": (
                 "Calcule le nombre de mois entre deux dates au format AAAA-MM. "
-                "Omettre date_fin si le poste est encore en cours."
+                "Omettre date_fin si la période est encore en cours."
             ),
             "parameters": {
                 "type": "object",
@@ -114,5 +210,5 @@ TOOLS = [
                 "required": ["date_debut"],
             },
         },
-    }
+    },
 ]

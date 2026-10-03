@@ -1,17 +1,25 @@
-"""Point d'entrée de l'étape 2 : extraire le CV et l'offre, puis afficher les objets validés."""
+"""Point d'entrée de l'étape 4 : extraction, puis une question à l'agent."""
 from pathlib import Path
 
+from agent import construire_system_prompt, executer_agent
 from extraction import extraire_cv, extraire_offre
+from outils import TOOLS, creer_outils
 
 DOSSIER_DATA = Path(__file__).parent.parent / "data"
 
-texte_cv = (DOSSIER_DATA / "cv_exemple.txt").read_text(encoding="utf-8")
-texte_offre = (DOSSIER_DATA / "offre_exemple.txt").read_text(encoding="utf-8")
+# 1. Démarrage : workflow fixe, une seule fois
+cv = extraire_cv((DOSSIER_DATA / "cv_exemple.txt").read_text(encoding="utf-8"))
+offre = extraire_offre((DOSSIER_DATA / "offre_exemple.txt").read_text(encoding="utf-8"))
 
-cv = extraire_cv(texte_cv)
-offre = extraire_offre(texte_offre)
+# 2. Les outils, liés à cette candidature
+outils = creer_outils(cv, offre)
 
-print("=== CV ===")
-print(cv.model_dump_json(indent=2))
-print("\n=== OFFRE ===")
-print(offre.model_dump_json(indent=2))
+# 3. La question, traitée par l'agent
+question = "Ai-je assez d'expérience pour ce stage, et quelles compétences me manquent ?"
+messages = [
+    {"role": "system", "content": construire_system_prompt(cv, offre)},
+    {"role": "user", "content": question},
+]
+
+print("Question :", question)
+print(executer_agent(messages, outils, TOOLS, trace=True))

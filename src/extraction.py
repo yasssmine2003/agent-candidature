@@ -13,7 +13,9 @@ REGLE_SECURITE = (
 
 CONSIGNE_CV = (
     "Extrais les informations du CV selon le schéma fourni. "
-    "N'invente rien : si une information est absente, utilise null. " + REGLE_SECURITE
+    "N'invente rien : si une information est absente, utilise null. "
+    "Pour les compétences démontrées, ne liste que celles écrites explicitement "
+    "dans la description de l'expérience, sans aucune déduction. " + REGLE_SECURITE
 )
 
 CONSIGNE_OFFRE = (

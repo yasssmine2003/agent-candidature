@@ -4,6 +4,7 @@ import pytest
 from modeles import Experience
 from outils import (
     calculer_duree_mois,
+    comparer_avec_sources,
     comparer_competences,
     experience_totale_mois,
     verifier_experience,
@@ -44,12 +45,28 @@ def test_comparaison_avec_cv_vide():
     assert resultat["manquantes"] == ["Python"]
 
 
+def test_competence_demontree_comptee_comme_presente():
+    resultat = comparer_avec_sources(["Python"], ["RAG"], ["RAG", "Docker"])
+    assert resultat["presentes"] == [{"competence": "RAG", "source": "démontrée dans une expérience"}]
+    assert resultat["manquantes"] == ["Docker"]
+
+
+def test_sources_distinguees():
+    resultat = comparer_avec_sources(["Python", "SQL"], ["python"], ["Python", "SQL"])
+    assert resultat["presentes"] == [
+        {"competence": "Python", "source": "déclarée et démontrée"},
+        {"competence": "SQL", "source": "déclarée"},
+    ]
+
+
 # --- Expérience -------------------------------------------------------
 
 def test_experience_totale():
     experiences = [
-        Experience(poste="Dev", entreprise="A", date_debut="2025-01", date_fin="2025-06"),
-        Experience(poste="Dev", entreprise="B", date_debut="2024-01", date_fin="2024-04"),
+        Experience(poste="Dev", entreprise="A", date_debut="2025-01", date_fin="2025-06",
+                   competences_demontrees=[]),
+        Experience(poste="Dev", entreprise="B", date_debut="2024-01", date_fin="2024-04",
+                   competences_demontrees=[]),
     ]
     assert experience_totale_mois(experiences) == 5 + 3
 
