@@ -19,6 +19,8 @@ def construire_system_prompt(cv, offre):
         f"Offre : {offre.titre} chez {offre.entreprise or 'entreprise non précisée'}.\n"
         "Pour toute question sur les compétences, l'expérience ou les durées, "
         "utilise les outils au lieu de deviner. "
+        "Pour juger si la candidate est qualifiée, examine à la fois l'expérience ET les compétences. "
+        "Distingue clairement les faits issus des outils de tes conseils personnels. "
         "Si une information n'est pas disponible, dis-le clairement. "
         "Réponds en français, de façon concise."
     )
@@ -41,13 +43,15 @@ def executer_outil(appel, outils):
         return f"Erreur lors de l'exécution de l'outil : {erreur}"
 
 
-def executer_agent(messages, outils, tools, trace=False):
+def executer_agent(messages, outils, tools, trace=False, journal=None):
     """Fait tourner la boucle jusqu'à une réponse en texte, ou jusqu'à MAX_TOURS.
 
     messages : l'historique, complété sur place
     outils   : le registre nom -> fonction Python (créé par creer_outils)
     tools    : la description des outils envoyée au LLM
     trace    : si True, affiche chaque appel d'outil (utile pour comprendre et déboguer)
+    journal  : dictionnaire optionnel où l'on enregistre les outils appelés et les tokens
+               consommés (utilisé par l'évaluation, étape 7)
     """
     for _ in range(MAX_TOURS):
         response = client.chat.completions.create(
@@ -59,11 +63,16 @@ def executer_agent(messages, outils, tools, trace=False):
         msg = response.choices[0].message
         messages.append(msg)
 
+        if journal is not None and response.usage:
+            journal["tokens"] = journal.get("tokens", 0) + response.usage.total_tokens
+
         if not msg.tool_calls:
             return msg.content
 
         for appel in msg.tool_calls:
             resultat = executer_outil(appel, outils)
+            if journal is not None:
+                journal.setdefault("outils", []).append(appel.function.name)
             if trace:
                 print(f"  [outil] {appel.function.name}({appel.function.arguments}) -> {resultat}")
             messages.append({

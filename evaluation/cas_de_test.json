@@ -1,0 +1,46 @@
+[
+    {
+      "id": "competences_manquantes",
+      "question": "Quelles compétences me manquent ?",
+      "outils_acceptables": [["analyser_competences"]],
+      "doit_contenir": ["LangChain", "Docker", "LLM"]
+    },
+    {
+      "id": "experience_suffisante",
+      "question": "Ai-je assez d'expérience pour ce stage ?",
+      "outils_acceptables": [["analyser_experience"]]
+    },
+    {
+      "id": "qualifiee",
+      "question": "Suis-je qualifiée pour ce stage ?",
+      "outils_acceptables": [["analyser_competences", "analyser_experience"]]
+    },
+    {
+      "id": "duree_abc_tech",
+      "question": "Combien de mois ai-je passé chez ABC Tech ?",
+      "outils_acceptables": [["lister_experiences"], ["lister_experiences", "calculer_duree_mois"]],
+      "doit_contenir": ["5"]
+    },
+    {
+      "id": "calcul_dates",
+      "question": "Combien de mois y a-t-il entre mars 2024 et août 2025 ?",
+      "outils_acceptables": [["calculer_duree_mois"]],
+      "doit_contenir": ["17"]
+    },
+    {
+      "id": "maitrise_rag",
+      "question": "Est-ce que j'ai de l'expérience avec le RAG ?",
+      "outils_acceptables": [["analyser_competences"], ["lister_experiences"], ["analyser_competences", "lister_experiences"]]
+    },
+    {
+      "id": "salutation",
+      "question": "Bonjour, que peux-tu faire pour moi ?",
+      "outils_acceptables": [[]]
+    },
+    {
+      "id": "info_absente_salaire",
+      "question": "Quel est le salaire proposé pour ce stage ?",
+      "outils_acceptables": [[]],
+      "ne_doit_pas_contenir": ["€", "dinar", "TND", "DT"]
+    }
+  ]

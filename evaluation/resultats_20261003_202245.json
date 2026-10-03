@@ -1,0 +1,139 @@
+{
+  "resume": {
+    "nombre_executions": 8,
+    "choix_outils_correct_pct": 100.0,
+    "contenu_correct_pct": 100.0,
+    "reussite_complete_pct": 100.0,
+    "erreurs": 0,
+    "latence_moyenne_s": 1.13,
+    "tokens_moyens": 1136,
+    "appels_outils_moyens": 0.88
+  },
+  "details": [
+    {
+      "id": "competences_manquantes",
+      "question": "Quelles compétences me manquent ?",
+      "outils_appeles": [
+        "analyser_competences"
+      ],
+      "nb_appels": 1,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 0.85,
+      "tokens": 1089,
+      "reponse": "**Compétences manquantes (par rapport à l’offre Stage PFE – Ingénieur IA Générative chez DataNova)**  \n\n- LangChain  \n- Docker  \n- Modèles de langage (LLM)  \n\nCes compétences ne figurent ni dans la section « Compétences » ni dans les expériences démontrées de votre CV."
+    },
+    {
+      "id": "experience_suffisante",
+      "question": "Ai-je assez d'expérience pour ce stage ?",
+      "outils_appeles": [
+        "analyser_experience"
+      ],
+      "nb_appels": 1,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 0.82,
+      "tokens": 1137,
+      "reponse": "Oui, vous avez suffisamment d’expérience : vous cumulez 6 mois d’expérience, ce qui correspond exactement au minimum requis par l’offre."
+    },
+    {
+      "id": "qualifiee",
+      "question": "Suis-je qualifiée pour ce stage ?",
+      "outils_appeles": [
+        "analyser_competences",
+        "analyser_experience"
+      ],
+      "nb_appels": 2,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 2.22,
+      "tokens": 2196,
+      "reponse": "**Faits issus des outils**\n\n| Élément | Résultat |\n|---------|----------|\n| **Compétences déclarées/démontrées** | Python, SQL, RAG (démontrée dans une expérience) |\n| **Compétences manquantes** | LangChain, Docker, LLM |\n| **Expérience totale** | 6 mois (minimum requis 6 mois) – la candidate atteint donc le seuil d’expérience |\n\n**Analyse**\n\n- **Compétences** : La candidate possède les compétences de base (Python, SQL) et a déjà travaillé sur un projet RAG, ce qui est pertinent pour un poste d’IA générative. Cependant, l’offre mentionne explicitement LangChain, Docker et une expérience avec des LLM (Large Language Models) – ces compétences ne sont pas présentes dans son CV.\n- **Expérience** : Elle a exactement le nombre de mois requis (6 mois). Cela montre qu’elle a déjà une expérience pratique, mais le stage est un PFE (Projet de Fin d’Études) ; il est donc possible que l’on attende une implication plus approfondie ou une expérience complémentaire.\n\n**Conclusion**\n\n- **Qualifiée sur le plan de l’expérience** : oui, elle atteint le minimum requis.\n- **Qualifiée sur le plan des compétences** : partiellement. Elle manque de compétences clés (LangChain, Docker, LLM) qui sont probablement essentielles pour le poste.\n\n**Recommandation**  \nSi vous avez la possibilité de compléter rapidement ces compétences (par exemple, un mini‑projet ou une formation en ligne sur LangChain/Docker/LLM), votre candidature deviendra plus forte. Sinon, il serait prudent de préciser dans votre lettre de motivation que vous êtes prête à apprendre ces technologies rapidement."
+    },
+    {
+      "id": "duree_abc_tech",
+      "question": "Combien de mois ai-je passé chez ABC Tech ?",
+      "outils_appeles": [
+        "lister_experiences"
+      ],
+      "nb_appels": 1,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 0.92,
+      "tokens": 1169,
+      "reponse": "Vous avez passé **5 mois** chez ABC Tech."
+    },
+    {
+      "id": "calcul_dates",
+      "question": "Combien de mois y a-t-il entre mars 2024 et août 2025 ?",
+      "outils_appeles": [
+        "calculer_duree_mois"
+      ],
+      "nb_appels": 1,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 0.86,
+      "tokens": 1028,
+      "reponse": "Il y a **17 mois** entre mars 2024 et août 2025."
+    },
+    {
+      "id": "maitrise_rag",
+      "question": "Est-ce que j'ai de l'expérience avec le RAG ?",
+      "outils_appeles": [
+        "lister_experiences"
+      ],
+      "nb_appels": 1,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 1.45,
+      "tokens": 1343,
+      "reponse": "Oui, vous avez de l’expérience avec le **RAG**.  \nDans votre dernier poste de **Stagiaire en intelligence artificielle** chez XYZ AI (depuis septembre 2026), vous avez démontré la compétence **RAG**."
+    },
+    {
+      "id": "salutation",
+      "question": "Bonjour, que peux-tu faire pour moi ?",
+      "outils_appeles": [],
+      "nb_appels": 0,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 0.95,
+      "tokens": 625,
+      "reponse": "Bonjour !  \nJe peux :\n\n1. **Comparer les compétences** de Yasmine Bouchami (déclarées dans son CV) avec celles requises pour le stage PFE – Ingénieur IA Générative chez DataNova.  \n2. **Calculer son expérience totale** en mois et vérifier si elle atteint le minimum demandé.  \n3. **Lister ses expériences** (poste, entreprise, dates, durée) pour un examen détaillé.  \n4. **Calculer la durée** entre deux dates si besoin.  \n\nN’hésitez pas à me fournir les détails du CV ou de l’offre, ou à me demander une analyse spécifique."
+    },
+    {
+      "id": "info_absente_salaire",
+      "question": "Quel est le salaire proposé pour ce stage ?",
+      "outils_appeles": [],
+      "nb_appels": 0,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 0.95,
+      "tokens": 503,
+      "reponse": "Je n’ai pas accès à l’information concernant le salaire proposé pour ce stage."
+    }
+  ]
+}
