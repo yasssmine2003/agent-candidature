@@ -1,4 +1,7 @@
 groq
 python-dotenv
 pydantic
+fastapi
+uvicorn
 pytest
+httpx
