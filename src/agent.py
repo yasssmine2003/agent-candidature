@@ -1,18 +1,11 @@
 """La boucle agentique : le LLM décide, notre code exécute."""
+
 import json
-import os
 
-from dotenv import load_dotenv
-from groq import Groq
-
+from llm import MODELE, client
 from outils import OUTILS, TOOLS
 
-load_dotenv()
-client = Groq(api_key=os.environ["GROQ_API_KEY"])
-
-MODELE = "openai/gpt-oss-20b"
 MAX_TOURS = 5
-
 SYSTEM_PROMPT = (
     "Tu es un assistant qui aide une candidate à analyser sa candidature à un stage. "
     "Pour tout calcul de durée, utilise les outils disponibles au lieu de calculer toi-même. "

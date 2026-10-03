@@ -47,6 +47,42 @@ def calculer_duree_mois(date_debut, date_fin=None):
     return duree_mois(debut, fin)
 
 
+def normaliser(competence):
+    """"  Python " et "python" doivent être considérés comme identiques."""
+    return competence.strip().lower()
+
+
+def comparer_competences(competences_cv, competences_offre):
+    """Renvoie les compétences de l'offre présentes dans le CV, et celles qui manquent.
+
+    Simplification pédagogique : la comparaison est exacte après normalisation.
+    "ML" et "Machine Learning" sont donc considérés comme différents.
+    """
+    cv = {normaliser(c) for c in competences_cv}
+
+    presentes = [c for c in competences_offre if normaliser(c) in cv]
+    manquantes = [c for c in competences_offre if normaliser(c) not in cv]
+
+    return {"presentes": presentes, "manquantes": manquantes}
+
+
+def experience_totale_mois(experiences):
+    """Somme des durées de toutes les expériences, en mois.
+
+    Simplification pédagogique : deux expériences qui se chevauchent sont comptées deux fois.
+    """
+    return sum(calculer_duree_mois(e.date_debut, e.date_fin) for e in experiences)
+
+
+def verifier_experience(total_mois, minimum_mois):
+    """Compare l'expérience de la candidate au minimum demandé par l'offre."""
+    if minimum_mois is None:
+        return {"suffisante": True, "detail": "L'offre ne précise pas d'expérience minimale."}
+
+    ecart = total_mois - minimum_mois
+    return {"suffisante": ecart >= 0, "ecart_mois": ecart}
+
+
 # ============================================================
 # 2. Registre : nom de l'outil -> fonction Python
 # ============================================================

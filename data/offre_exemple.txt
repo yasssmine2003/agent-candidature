@@ -1,0 +1,10 @@
+Stage PFE - Ingénieur IA Générative
+Entreprise : DataNova
+
+Nous recherchons un(e) stagiaire pour développer des agents IA.
+
+Profil recherché :
+- Python, LangChain, Docker, SQL
+- Connaissance des LLM et du RAG
+- Au moins 6 mois d'expérience en développement
+- Curiosité et autonomie

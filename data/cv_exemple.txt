@@ -1,0 +1,10 @@
+Yasmine Bouchami
+Étudiante en cycle ingénieur informatique
+
+Compétences : Python, Machine Learning, FastAPI, SQL, Git, travail en équipe
+
+Expériences
+- Développeuse Python, ABC Tech, janvier 2025 - juin 2025
+  Développement d'API REST avec FastAPI.
+- Stagiaire en intelligence artificielle, XYZ AI, septembre 2026 - présent
+  Prototypage d'un système RAG.
