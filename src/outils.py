@@ -65,6 +65,14 @@ def comparer_competences(competences_cv, competences_offre):
 
     return {"presentes": presentes, "manquantes": manquantes}
 
+#nouvel  outil 
+def competences_supplementaires(competences_cv, competences_offre):
+    """Renvoie les compétences du CV que l'offre ne demande pas."""
+    offre={normaliser(c) for c in competences_offre}
+    supplementaires=[c for c in competences_cv if normaliser(c) not in offre]
+    return supplementaires
+
+
 
 def comparer_avec_sources(declarees, demontrees, requises):
     """Comme comparer_competences, mais en tenant compte des compétences démontrées
@@ -143,13 +151,27 @@ def creer_outils(cv, offre):
             }
             for e in cv.experiences
         ]
+    def analyser_atouts():
+        demontrees = [c for e in cv.experiences for c in e.competences_demontrees]
+        toutes = cv.competences + demontrees
+        uniques=[]
+        vus=set()
+        for e in toutes:
+            cle=normaliser(e)
+            if cle not in vus:
+                vus.add(cle)
+                uniques.append(e)
+        
+        return {"atouts": competences_supplementaires(uniques, offre.competences_requises)}
 
     return {
         "analyser_competences": analyser_competences,
         "analyser_experience": analyser_experience,
         "lister_experiences": lister_experiences,
         "calculer_duree_mois": calculer_duree_mois,
+        "analyser_atouts": analyser_atouts,
     }
+    
 
 
 # ============================================================
@@ -209,6 +231,18 @@ TOOLS = [
                 },
                 "required": ["date_debut"],
             },
+        },
+    },
+        {
+        "type": "function",
+        "function": {
+            "name": "analyser_atouts",
+            "description": (
+                "Renvoie les compétences du CV qui ne sont pas demandées par l'offre, "
+                "c'est-à-dire les atouts supplémentaires de la candidate."
+                
+            ),
+            "parameters": SANS_ARGUMENTS,
         },
     },
 ]

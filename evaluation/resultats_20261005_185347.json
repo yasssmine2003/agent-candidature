@@ -1,0 +1,157 @@
+{
+  "resume": {
+    "nombre_executions": 9,
+    "choix_outils_correct_pct": 100.0,
+    "contenu_correct_pct": 100.0,
+    "reussite_complete_pct": 100.0,
+    "erreurs": 0,
+    "latence_moyenne_s": 4.23,
+    "tokens_moyens": 1363,
+    "appels_outils_moyens": 1.11
+  },
+  "details": [
+    {
+      "id": "competences_manquantes",
+      "question": "Quelles compétences me manquent ?",
+      "outils_appeles": [
+        "analyser_competences"
+      ],
+      "nb_appels": 1,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 0.88,
+      "tokens": 1187,
+      "reponse": "**Compétences manquantes par rapport à l’offre :**\n\n- LangChain  \n- Docker  \n- LLM (Large Language Models)  \n\nCes compétences ne figurent pas dans votre CV (ni déclarées ni démontrées dans vos expériences)."
+    },
+    {
+      "id": "experience_suffisante",
+      "question": "Ai-je assez d'expérience pour ce stage ?",
+      "outils_appeles": [
+        "analyser_experience"
+      ],
+      "nb_appels": 1,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 0.97,
+      "tokens": 1239,
+      "reponse": "Oui, votre expérience totale de 6 mois correspond exactement au minimum requis de 6 mois pour ce stage."
+    },
+    {
+      "id": "qualifiee",
+      "question": "Suis-je qualifiée pour ce stage ?",
+      "outils_appeles": [
+        "analyser_competences",
+        "analyser_experience"
+      ],
+      "nb_appels": 2,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 1.96,
+      "tokens": 2054,
+      "reponse": "**Évaluation rapide**\n\n| Critère | Résultat | Commentaire |\n|---------|----------|-------------|\n| **Compétences demandées** | 3/6 : Python, SQL, RAG | LangChain, Docker et LLM manquants |\n| **Expérience totale** | 6 mois (minimum requis) | Vous avez atteint le seuil minimal |\n| **Atouts supplémentaires** | 3 compétences non demandées | Python, SQL, RAG sont utiles mais ne couvrent pas l’ensemble des exigences |\n\n**Conclusion**  \nVous avez l’expérience minimale requise et possédez plusieurs compétences pertinentes, mais vous manquez de LangChain, Docker et d’une expérience directe avec les LLM, qui sont explicitement demandés pour ce stage. Vous pourriez être considérée, mais il serait judicieux de mettre en avant vos projets RAG et votre maîtrise de Python/SQL, et de montrer votre volonté d’apprendre rapidement les technologies manquantes."
+    },
+    {
+      "id": "duree_abc_tech",
+      "question": "Combien de mois ai-je passé chez ABC Tech ?",
+      "outils_appeles": [
+        "lister_experiences",
+        "lister_experiences",
+        "calculer_duree_mois"
+      ],
+      "nb_appels": 3,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 3.19,
+      "tokens": 2871,
+      "reponse": "Vous avez passé **5 mois** chez ABC Tech."
+    },
+    {
+      "id": "calcul_dates",
+      "question": "Combien de mois y a-t-il entre mars 2024 et août 2025 ?",
+      "outils_appeles": [
+        "calculer_duree_mois"
+      ],
+      "nb_appels": 1,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 4.28,
+      "tokens": 1149,
+      "reponse": "Il y a 17 mois entre mars 2024 et août 2025."
+    },
+    {
+      "id": "maitrise_rag",
+      "question": "Est-ce que j'ai de l'expérience avec le RAG ?",
+      "outils_appeles": [
+        "lister_experiences"
+      ],
+      "nb_appels": 1,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 7.06,
+      "tokens": 1413,
+      "reponse": "Oui, vous avez une expérience avec le RAG : vous êtes actuellement stagiaire en intelligence artificielle chez XYZ AI (depuis septembre 2026) où vous avez démontré cette compétence."
+    },
+    {
+      "id": "salutation",
+      "question": "Bonjour, que peux-tu faire pour moi ?",
+      "outils_appeles": [],
+      "nb_appels": 0,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 7.88,
+      "tokens": 676,
+      "reponse": "Bonjour !  \nJe peux :\n\n1. **Comparer les compétences** de Yasmine Bouchami (déclarées et démontrées) avec celles exigées par le stage PFE – Ingénieur IA Générative chez DataNova.  \n2. **Calculer son expérience totale** en mois et vérifier si elle atteint le minimum requis.  \n3. **Lister ses expériences** (poste, entreprise, dates, durée) pour un examen détaillé.  \n4. **Identifier les atouts supplémentaires** qu’elle possède par rapport à l’offre.  \n\nDites-moi ce que vous souhaitez analyser en premier !"
+    },
+    {
+      "id": "info_absente_salaire",
+      "question": "Quel est le salaire proposé pour ce stage ?",
+      "outils_appeles": [],
+      "nb_appels": 0,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 3.44,
+      "tokens": 564,
+      "reponse": "Je n’ai pas accès à l’information concernant le salaire proposé pour ce stage."
+    },
+    {
+      "id": "atouts",
+      "question": "Quels sont mes atouts en plus de ce que demande l'offre ?",
+      "outils_appeles": [
+        "analyser_atouts"
+      ],
+      "nb_appels": 1,
+      "outils_ok": true,
+      "contenu_ok": true,
+      "reussite": true,
+      "problemes": [],
+      "erreur": null,
+      "latence_s": 8.38,
+      "tokens": 1114,
+      "reponse": "**Atouts supplémentaires par rapport à l’offre :**\n\n- **Machine Learning**  \n- **FastAPI**  \n- **Git**"
+    }
+  ]
+}

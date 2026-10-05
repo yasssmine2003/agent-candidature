@@ -1,7 +1,7 @@
 """Tests des outils : du Python pur, sans aucun appel au LLM (gratuits et instantanés)."""
 import pytest
 
-from modeles import Experience
+from modeles import Experience, CV, OffreStage
 from outils import (
     calculer_duree_mois,
     comparer_avec_sources,
@@ -9,6 +9,8 @@ from outils import (
     experience_totale_mois,
     verifier_experience,
     vers_annee_mois,
+    competences_supplementaires,
+    creer_outils,
 )
 
 
@@ -77,3 +79,32 @@ def test_experience_insuffisante():
 
 def test_offre_sans_minimum():
     assert verifier_experience(0, None)["suffisante"] is True
+
+def test_competences_supplementaires():
+    resultat = competences_supplementaires(["Python", "Git", " FastAPI "], ["python", "Docker"])
+    assert resultat == ["Git", " FastAPI "]
+def test_analyser_atouts_sans_doublon():
+    cv = CV(
+        nom="Y",
+        competences=["Python", "FastAPI"],
+        experiences=[
+            Experience(poste="Dev", entreprise="A", date_debut="2025-01", date_fin="2025-06",
+                       competences_demontrees=["fastapi", "Git"]),
+        ],
+    )
+    offre = OffreStage(titre="Stage", entreprise="B", competences_requises=["Python"],
+                       experience_min_mois=None)
+    resultat = creer_outils(cv, offre)["analyser_atouts"]()
+    assert resultat == {"atouts": ["FastAPI", "Git"]}
+def test_analyser_atouts_ignore_les_espaces():
+    cv = CV(
+        nom="Y",
+        competences=["Git"],
+        experiences=[
+            Experience(poste="Dev", entreprise="A", date_debut="2025-01", date_fin="2025-06",
+                       competences_demontrees=[" git "]),
+        ],
+    )
+    offre = OffreStage(titre="Stage", entreprise="B", competences_requises=[],
+                       experience_min_mois=None)
+    assert creer_outils(cv, offre)["analyser_atouts"]() == {"atouts": ["Git"]}

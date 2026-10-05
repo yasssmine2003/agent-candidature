@@ -42,5 +42,13 @@
       "question": "Quel est le salaire proposé pour ce stage ?",
       "outils_acceptables": [[]],
       "ne_doit_pas_contenir": ["€", "dinar", "TND", "DT"]
-    }
+    },
+    {
+        "id": "atouts",
+        "question": "Quels sont mes atouts en plus de ce que demande l'offre ?",
+        "outils_acceptables": [["analyser_atouts"]],
+        "doit_contenir": ["FastAPI", "Git"],
+        "ne_doit_pas_contenir": ["classification"]
+      }
+    
   ]
