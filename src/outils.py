@@ -6,6 +6,7 @@ Ce fichier contient trois choses :
 3. TOOLS : la description des outils au format JSON (lue par le LLM).
 """
 from datetime import date
+from embeddings import encoder
 
 
 # ============================================================
@@ -52,18 +53,76 @@ def normaliser(competence):
     return competence.strip().lower()
 
 
-def comparer_competences(competences_cv, competences_offre):
+# ============================================================
+# À COLLER dans src/outils.py, À LA PLACE de l'ancienne fonction comparer_competences.
+# Garde ta fonction normaliser(), elle est réutilisée ici.
+# Ajoute en haut du fichier :   from embeddings import encoder
+# ============================================================
+
+# Les embeddings comprennent mal les acronymes courts (étape 0 : « ML » / « Machine Learning » = 0.338).
+# On les développe AVANT la comparaison : c'est l'expansion de requête, rendue automatique.
+ACRONYMES = {
+    "ml": "machine learning",
+    "dl": "deep learning",
+    "nlp": "natural language processing",
+    "taln": "traitement automatique du langage naturel",
+    "ia": "intelligence artificielle",
+    "ai": "artificial intelligence",
+    "llm": "large language model",
+    "bdd": "base de données",
+    "poo": "programmation orientée objet",
+    "oop": "object-oriented programming",
+}
+
+# Score minimal pour considérer deux compétences comme identiques.
+# NE PAS DEVINER : calibre-le avec src/calibrer_seuil.py, puis reporte la valeur ici.
+SEUIL_SIMILARITE = 0.75
+
+
+def developper(competence):
+    """'ML' -> 'ML (machine learning)'. Garde le terme d'origine et ajoute sa forme longue."""
+    cle = normaliser(competence)
+    return f"{competence} ({ACRONYMES[cle]})" if cle in ACRONYMES else competence
+
+
+def comparer_competences(competences_cv, competences_offre, seuil=SEUIL_SIMILARITE):
     """Renvoie les compétences de l'offre présentes dans le CV, et celles qui manquent.
 
-    Simplification pédagogique : la comparaison est exacte après normalisation.
-    "ML" et "Machine Learning" sont donc considérés comme différents.
+    Comparaison PAR LE SENS (projet 2) : acronymes développés, puis embeddings + seuil.
+    Le contrat est inchangé (presentes / manquantes = listes de textes) ; la clé
+    `correspondances` explique chaque rapprochement, pour la transparence.
     """
-    cv = {normaliser(c) for c in competences_cv}
+    if not competences_offre:
+        return {"presentes": [], "manquantes": [], "correspondances": []}
+    if not competences_cv:
+        return {"presentes": [], "manquantes": list(competences_offre), "correspondances": []}
 
-    presentes = [c for c in competences_offre if normaliser(c) in cv]
-    manquantes = [c for c in competences_offre if normaliser(c) not in cv]
+    exactes = {normaliser(c): c for c in competences_cv}
 
-    return {"presentes": presentes, "manquantes": manquantes}
+    # Tous les scores d'un coup : matrice (nb compétences offre) x (nb compétences CV).
+    # Les vecteurs sont normalisés, donc le produit scalaire EST le cosinus (étape 2).
+    v_offre = encoder([developper(c) for c in competences_offre])
+    v_cv = encoder([developper(c) for c in competences_cv])
+    scores = v_offre @ v_cv.T
+
+    presentes, manquantes, correspondances = [], [], []
+    for i, competence in enumerate(competences_offre):
+        # 1. Correspondance exacte : réglé, pas besoin du sens
+        if normaliser(competence) in exactes:
+            presentes.append(competence)
+            correspondances.append({"offre": competence, "cv": exactes[normaliser(competence)], "score": 1.0})
+            continue
+        # 2. Sinon, la compétence du CV la plus proche par le sens
+        j = int(scores[i].argmax())
+        if scores[i, j] >= seuil:
+            presentes.append(competence)
+            correspondances.append(
+                {"offre": competence, "cv": competences_cv[j], "score": round(float(scores[i, j]), 3)}
+            )
+        else:
+            manquantes.append(competence)
+
+    return {"presentes": presentes, "manquantes": manquantes, "correspondances": correspondances}
 
 #nouvel  outil 
 def competences_supplementaires(competences_cv, competences_offre):
